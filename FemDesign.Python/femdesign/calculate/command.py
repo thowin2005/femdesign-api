@@ -407,4 +407,3 @@ class CmdListGen:
                 guid_elem.text = str(guid)
 
         return cmd_listgen
-

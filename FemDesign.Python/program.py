@@ -1,9 +1,12 @@
-import femdesign as fd
+from femdesign.comunication import FemDesignConnection, Verbosity
+from femdesign.calculate.analysis import Analysis, Design, DesignModule, CombSettings, CombItem
+from femdesign.comunication import DesignModule
 
-pipe = fd.FemDesignConnection(fd_path= r"C:\Program Files\StruSoft\FEM-Design 23\fd3dstruct.exe",
+
+pipe = FemDesignConnection(fd_path= r"C:\Program Files\StruSoft\FEM-Design 23\fd3dstruct.exe",
                               minimized= False)
 try:
-    pipe.SetVerbosity(fd.Verbosity.SCRIPT_LOG_LINES)
+    pipe.SetVerbosity(Verbosity.SCRIPT_LOG_LINES)
     pipe.Open(r"simple_beam.str")
     pipe.SetProjectDescription(project_name="Amazing project",
                             project_description="Created through Python",
@@ -22,7 +25,6 @@ try:
     pipe.RunAnalysis(static_analysis)
 
     pipe.RunAnalysis(Analysis.FrequencyAnalysis(num_shapes=5))
-    
     pipe.RunDesign(DesignModule.STEELDESIGN, Design(False))
 
     pipe.Save(r"example\to_delete\simple_beam_out_2.str")
