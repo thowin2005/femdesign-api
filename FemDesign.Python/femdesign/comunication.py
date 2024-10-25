@@ -7,6 +7,7 @@ from calculate.analysis import Analysis, Design, DesignModule
 from calculate.fdscript import Fdscript
 from utilities.filehelper import OutputFileHelper
 from calculate.command import CmdUser, CmdCalculation, CmdListGen, CmdOpen, CmdProjDescr, CmdSave
+
 import win32file
 import win32pipe
 
@@ -220,7 +221,7 @@ class _FdConnect:
              *16: calculation window messages (except fortran)
              *32: progress window title
 
-              echo and stat always cretes output, otherwise nothing is written aT V = 0
+              echo and stat always creates output, otherwise nothing is written aT V = 0
               * not yet supported
         """
         return self.Send(f"v {n}")
@@ -327,6 +328,7 @@ class FemDesignConnection(_FdConnect):
         if not os.path.exists(value):
             os.makedirs(os.path.abspath(value))
 
+    
     def RunScript(self, fdscript : Fdscript, file_name : str = "script"):
         """
 
@@ -344,7 +346,7 @@ class FemDesignConnection(_FdConnect):
         """Run analysis
 
         Args:
-            analysis (analysis.Analysis): analysis object
+            analysis (analysis.Analysis): analysis object    
         """
         log = OutputFileHelper.GetLogFilePath(self.output_dir)
 
@@ -375,6 +377,18 @@ class FemDesignConnection(_FdConnect):
             additional_info (dict): define key-value user data. Defaults to None.
             read (bool, optional): read the project settings. Value will be store in the clipboard. Defaults to False.
             reset (bool, optional): reset the project settings. Defaults to False.
+        
+        Examples
+        --------
+        >>> pipe = FemDesignConnection(fd_path= r"C:\Program Files\StruSoft\FEM-Design 23\\fd3dstruct.exe",
+                            minimized= False)
+        >>> pipe.SetProjectDescription(project_name="Amazing project",
+                            project_description="Created through Python",
+                            designer="Marco Pellegrino Engineer",
+                            signature="MP",
+                            comment="Wish for the best",
+                            project_parameters={"italy": "amazing", "sweden": "amazing_too"})
+        
         """
         log = OutputFileHelper.GetLogFilePath(self.output_dir)
 
@@ -387,6 +401,13 @@ class FemDesignConnection(_FdConnect):
 
         Args:
             file_name (str): name of the file to save
+
+        Examples
+        --------
+        >>> pipe = FemDesignConnection(fd_path= "C:\Program Files\StruSoft\FEM-Design 23\\fd3dstruct.exe",
+                            minimized= False)
+        >>> pipe.Save(r"outputFile.str")
+        >>> pipe.Save(r"outputFile.struxml")
         """
         log = OutputFileHelper.GetLogFilePath(self.output_dir)
 

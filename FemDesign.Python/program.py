@@ -1,3 +1,6 @@
+import sys
+
+
 from femdesign.comunication import FemDesignConnection, Verbosity
 from femdesign.calculate.analysis import Analysis, Design, DesignModule, CombSettings, CombItem
 from femdesign.comunication import DesignModule
