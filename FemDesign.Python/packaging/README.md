@@ -12,6 +12,13 @@ FEM-Design is an advanced and intuitive structural analysis software. We support
 
 The quick and easy nature of FEM-Design makes it an ideal choice for all types of construction tasks, from single element design to global stability analysis of large buildings, making it the best practical program for structural engineers to use for their day to day tasks.
 
+
+## Scope
+
+The python package is mainly focus on [`fdscript`](https://femdesign-api-docs.onstrusoft.com/docs/advanced/fdscript) automation which will help you in automatise processes as running analysis, design and read results.
+
+The construction of the `Database` object is currently out of scope as it is delegated to the users. `Database` is based on `xml` sintax and you can use library such as `xml.etree.ElementTree` to manipulate the file.
+
 ## Example
 
 ```python
@@ -20,33 +27,12 @@ from femdesign.calculate.command import DesignModule
 from femdesign.calculate.analysis import Analysis, Design, CombSettings, CombItem
 
 
-pipe = FemDesignConnection(fd_path= r"C:\Program Files\StruSoft\FEM-Design 23\fd3dstruct.exe",
-                              minimized= False)
+pipe = FemDesignConnection()
 try:
     pipe.SetVerbosity(Verbosity.SCRIPT_LOG_LINES)
     pipe.Open(r"example/simple_beam.str")
-    pipe.SetProjectDescription(project_name="Amazing project",
-                            project_description="Created through Python",
-                            designer="Marco Pellegrino Engineer",
-                            signature="MP",
-                            comment="Wish for the best",
-                            additional_info={"italy": "amazing", "sweden": "amazing_too"})
-
-
-
-    # Define combination settings
-    combSettings = CombSettings()
-    combSettings.combitems.append(CombItem.StaticAnalysis(NLE=True))
-
-    static_analysis = Analysis.StaticAnalysis(combSettings)
-    pipe.RunAnalysis(static_analysis)
-
     pipe.RunAnalysis(Analysis.FrequencyAnalysis(num_shapes=5))
-    pipe.RunDesign(DesignModule.STEELDESIGN, Design(False))
-
     pipe.Save(r"example\to_delete\simple_beam_out_2.str")
-    pipe.GenerateListTables(bsc_file=r"example\bsc\finite-elements-nodes.bsc",
-                            csv_file=r"example\output\finite-elements-nodes.csv")
     pipe.GenerateListTables(bsc_file=r"example\bsc\quantity-estimation-steel.bsc",
                             csv_file=r"example\output\quantity-estimation-steel.csv")
     pipe.Exit()
@@ -55,5 +41,9 @@ except Exception as err:
     raise err
 ```
 
-> [!NOTE]
-> I want the readers to read it carefully as it contains many important docs.
+A wider list of examples can be found in [example](https://github.com/strusoft/femdesign-api/tree/master/FemDesign.Python/examples)
+
+## Documentation
+
+
+https://femdesign-api-docs.onstrusoft.com/docs/intro
