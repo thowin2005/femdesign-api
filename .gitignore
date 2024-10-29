@@ -43,3 +43,4 @@ FemDesign.Tests/Results/**/*.log
 /FemDesign.Python/__pycache__
 /FemDesign.Python/test/__pycache__
 *.pyc
+**/FEM-Design API/
