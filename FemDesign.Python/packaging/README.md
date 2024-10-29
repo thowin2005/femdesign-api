@@ -2,7 +2,7 @@
 
 <a href="https://strusoft.com/software/3d-structural-analysis-software-fem-design/" target="_blank">
     <p align="center">
-        <img src="assets/FD_logo.png" alt="isolated" width="200" style="centre"/>
+        <img src="https://raw.githubusercontent.com/strusoft/femdesign-api/refs/heads/master/FemDesign.Core/Resources/icons/FemDesignAPI.png" alt="isolated" width="200" style="centre"/>
     </p>
 </a>
 
