@@ -1,10 +1,13 @@
 [project]
-name = "FEM-Design"
+name = "fem-design"
 version = "0.0.1"
 authors = [
   { name="FEM-Design", email="femdesign.api@strusoft.com" },
 ]
-description = ""
+maintainers = [
+  {name = "Marco Pellegrino", email = "marco.pellegrino@strusoft.com"}
+]
+description = "The FEM-Design API package"
 readme = "README.md"
 requires-python = ">=3.8"
 classifiers = [
@@ -12,7 +15,9 @@ classifiers = [
     "License :: OSI Approved :: MIT License",
     "Operating System :: Microsoft",
 ]
+keywords = ["fem", "fea", "structures", "strusoft", "FEM-Design API"]
 
 [project.urls]
 Homepage = "https://femdesign-api-docs.onstrusoft.com"
+Repository = "https://github.com/strusoft/femdesign-api"
 Issues = "https://github.com/strusoft/femdesign-api/issues"

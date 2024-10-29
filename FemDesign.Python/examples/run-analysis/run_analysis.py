@@ -1,22 +1,19 @@
-import sys
-
-
 from femdesign.comunication import FemDesignConnection, Verbosity
-from femdesign.calculate.analysis import Analysis, Design, DesignModule, CombSettings, CombItem
-from femdesign.comunication import DesignModule
+from femdesign.calculate.command import DesignModule
+from femdesign.calculate.analysis import Analysis, Design, CombSettings, CombItem
 
 
 pipe = FemDesignConnection(fd_path= r"C:\Program Files\StruSoft\FEM-Design 23\fd3dstruct.exe",
                               minimized= False)
 try:
     pipe.SetVerbosity(Verbosity.SCRIPT_LOG_LINES)
-    pipe.Open(r"simple_beam.str")
+    pipe.Open(r"example/simple_beam.str")
     pipe.SetProjectDescription(project_name="Amazing project",
                             project_description="Created through Python",
                             designer="Marco Pellegrino Engineer",
                             signature="MP",
                             comment="Wish for the best",
-                            project_parameters={"italy": "amazing", "sweden": "amazing_too"})
+                            additional_info={"italy": "amazing", "sweden": "amazing_too"})
 
 
 
