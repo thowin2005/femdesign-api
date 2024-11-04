@@ -1,11 +1,12 @@
 [project]
 name = "FEM-Design"
-version = "0.0.2"
+version = "0.0.5"
 authors = [
   { name="FEM-Design", email="femdesign.api@strusoft.com" },
 ]
 maintainers = [
-  {name = "Marco Pellegrino", email = "marco.pellegrino@strusoft.com"}
+  {name = "Marco Pellegrino", email = "marco.pellegrino@strusoft.com"},
+  {name = "Illyés Zoltán", email = "sinnach@strusoft.hu"},
 ]
 description = "The FEM-Design API package"
 readme = "README.md"
