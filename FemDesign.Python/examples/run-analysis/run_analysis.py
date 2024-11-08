@@ -3,11 +3,10 @@ from femdesign.calculate.command import DesignModule
 from femdesign.calculate.analysis import Analysis, Design, CombSettings, CombItem
 
 
-pipe = FemDesignConnection(fd_path= r"C:\Program Files\StruSoft\FEM-Design 23\fd3dstruct.exe",
-                              minimized= False)
+pipe = FemDesignConnection(minimized= False)
 try:
     pipe.SetVerbosity(Verbosity.SCRIPT_LOG_LINES)
-    pipe.Open(r"example/simple_beam.str")
+    pipe.Open(r"simple_beam.str")
     pipe.SetProjectDescription(project_name="Amazing project",
                             project_description="Created through Python",
                             designer="Marco Pellegrino Engineer",
@@ -17,21 +16,19 @@ try:
 
 
 
-
-    combSettings = CombSettings()
-    combSettings.combitems.append(CombItem.StaticAnalysis(NLE=True))
-
-    static_analysis = Analysis.StaticAnalysis(combSettings)
+    static_analysis = Analysis.StaticAnalysis()
     pipe.RunAnalysis(static_analysis)
 
-    pipe.RunAnalysis(Analysis.FrequencyAnalysis(num_shapes=5))
+    freq_analysis = Analysis.FrequencyAnalysis(num_shapes=5)
+    pipe.RunAnalysis(freq_analysis)
+
     pipe.RunDesign(DesignModule.STEELDESIGN, Design(False))
 
-    pipe.Save(r"example\to_delete\simple_beam_out_2.str")
-    pipe.GenerateListTables(bsc_file=r"example\bsc\finite-elements-nodes.bsc",
-                            csv_file=r"example\output\finite-elements-nodes.csv")
-    pipe.GenerateListTables(bsc_file=r"example\bsc\quantity-estimation-steel.bsc",
-                            csv_file=r"example\output\quantity-estimation-steel.csv")
+    pipe.Save(r"simple_beam_out_2.str")
+    pipe.GenerateListTables(bsc_file=r"bsc\finite-elements-nodes.bsc",
+                            csv_file=r"output\finite-elements-nodes.csv")
+    pipe.GenerateListTables(bsc_file=r"bsc\quantity-estimation-steel.bsc",
+                            csv_file=r"output\quantity-estimation-steel.csv")
     pipe.Exit()
 except Exception as err:
     pipe.KillProgramIfExists()
