@@ -12,6 +12,7 @@ import win32file
 import win32pipe
 
 import os
+import shutil
 
 """
 FEM - Design usage with pipe
@@ -302,9 +303,11 @@ class FemDesignConnection(_FdConnect):
                  pipe_name : str ="FdPipe1",
                  verbose : Verbosity = Verbosity.SCRIPT_LOG_LINES,
                  output_dir : str = None,
-                 minimized : bool = False,):
+                 minimized : bool = False,
+                 delete_dir : bool = True):
         super().__init__(pipe_name)
 
+        self.delete_dir = delete_dir
         self._output_dir = output_dir
 
         os.environ["FD_NOLOGO"] = "1"
@@ -314,6 +317,11 @@ class FemDesignConnection(_FdConnect):
         
         self.Start(fd_path)
         self.LogLevel(verbose)
+
+    def __exit__(self):
+        super().__exit__()
+        if(self.delete_dir):
+            shutil.rmtree(os.path.join(self._output_dir, "scripts"))
 
     @property
     def output_dir(self):

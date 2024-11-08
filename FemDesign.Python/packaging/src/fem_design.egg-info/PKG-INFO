@@ -1,9 +1,9 @@
 Metadata-Version: 2.1
-Name: fem-design
-Version: 0.0.1
+Name: FEM-Design
+Version: 0.0.6
 Summary: The FEM-Design API package
 Author-email: FEM-Design <femdesign.api@strusoft.com>
-Maintainer-email: Marco Pellegrino <marco.pellegrino@strusoft.com>
+Maintainer-email: Marco Pellegrino <marco.pellegrino@strusoft.com>, Illyés Zoltán <sinnach@strusoft.hu>
 Project-URL: Homepage, https://femdesign-api-docs.onstrusoft.com
 Project-URL: Repository, https://github.com/strusoft/femdesign-api
 Project-URL: Issues, https://github.com/strusoft/femdesign-api/issues
@@ -19,7 +19,7 @@ License-File: LICENSE
 
 <a href="https://strusoft.com/software/3d-structural-analysis-software-fem-design/" target="_blank">
     <p align="center">
-        <img src="assets/FD_logo.png" alt="isolated" width="200" style="centre"/>
+        <img src="https://raw.githubusercontent.com/strusoft/femdesign-api/refs/heads/master/FemDesign.Core/Resources/icons/FemDesignAPI.png" alt="isolated" width="200" style="centre"/>
     </p>
 </a>
 

@@ -406,7 +406,7 @@ class CmdListGen:
             raise ValueError("outfile must have suffix .csv")
 
         if not outfile:
-            outfile = pathlib.Path(self.bscfile).with_suffix(".csv")
+            outfile = pathlib.Path(bscfile).with_suffix(".csv")
 
         if not os.path.exists(os.path.dirname(os.path.abspath(outfile))):
             os.makedirs(os.path.dirname(os.path.abspath(outfile)))

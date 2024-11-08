@@ -1,5 +1,5 @@
-from command import *
-from analysis import Analysis, Comb
+from femdesign.calculate.command import *
+from femdesign.calculate.analysis import Analysis, CombSettings
 
 def test_cmd_open():
     file_path = "myFilePath.str"
@@ -45,15 +45,15 @@ def test_analysis():
     assert xmlAnalysis.find("Comb") is None
     assert xmlAnalysis.attrib.get("calcStab") == "0"
 
-    xmlAnalysis = Analysis.StaticAnalysis(Comb.Default(), True).to_xml_element()
+    xmlAnalysis = Analysis.StaticAnalysis(True, True).to_xml_element()
     assert xmlAnalysis.attrib.get("calcCase") == "1"
     assert xmlAnalysis.attrib.get("calcComb") == "1"
-    assert xmlAnalysis.find("comb") is not None
+    assert xmlAnalysis.find("comb") is None
 
-    xmlAnalysis = Analysis.StaticAnalysis(Comb.Default(), False).to_xml_element()
+    xmlAnalysis = Analysis.StaticAnalysis(True, False).to_xml_element()
     assert xmlAnalysis.attrib.get("calcCase") == "1"
     assert xmlAnalysis.attrib.get("calcComb") == "0"
-    assert xmlAnalysis.find("comb") is not None
+    assert xmlAnalysis.find("comb") is None
 
     xmlAnalysis = Analysis.FrequencyAnalysis().to_xml_element()
     assert xmlAnalysis.attrib.get("calcFreq") == "1"

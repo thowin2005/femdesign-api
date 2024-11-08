@@ -1,6 +1,6 @@
-from command import *
-from analysis import Analysis, Comb, Design
-from fdpipe import FemDesignConnection
+from femdesign.calculate.command import *
+from femdesign.calculate.analysis import Analysis, CombSettings, Design
+from femdesign.comunication import FemDesignConnection
 import pytest
 
 def test_pipe():
@@ -23,6 +23,4 @@ def test_pipe():
         assert isinstance(e, ValueError)
         assert str(e) == "File myModel.3dm must have extension .struxml or .str"
 
-
-    connection.RunDesign(DesignModule.STEELDESIGN, design)
-
+    connection.__exit__()

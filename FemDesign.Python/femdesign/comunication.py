@@ -12,6 +12,7 @@ import win32file
 import win32pipe
 
 import os
+import shutil
 
 """
 FEM - Design usage with pipe
@@ -98,7 +99,7 @@ def GetElapsedTime(start_time):
 
 class _FdConnect:
 
-    def __exit__(self, exc_type, exc_value, traceback):
+    def __exit__(self):
         self.Detach()
         self.ClosePipe()
 
@@ -302,9 +303,11 @@ class FemDesignConnection(_FdConnect):
                  pipe_name : str ="FdPipe1",
                  verbose : Verbosity = Verbosity.SCRIPT_LOG_LINES,
                  output_dir : str = None,
-                 minimized : bool = False,):
+                 minimized : bool = False,
+                 delete_dir : bool = True):
         super().__init__(pipe_name)
 
+        self.delete_dir = delete_dir
         self._output_dir = output_dir
 
         os.environ["FD_NOLOGO"] = "1"
@@ -314,6 +317,14 @@ class FemDesignConnection(_FdConnect):
         
         self.Start(fd_path)
         self.LogLevel(verbose)
+
+    def __exit__(self):
+        super().__exit__()
+        if(self.delete_dir):
+            try:
+                shutil.rmtree(os.path.join(self.output_dir, "scripts"))
+            except:
+                pass
 
     @property
     def output_dir(self):
@@ -452,3 +463,6 @@ class FemDesignConnection(_FdConnect):
     def Disconnect(self):
         super().Detach()
         win32pipe.DisconnectNamedPipe(self.pipe_send)
+
+    def Close(self):
+        self.__exit__()
