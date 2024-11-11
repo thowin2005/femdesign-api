@@ -99,7 +99,7 @@ def GetElapsedTime(start_time):
 
 class _FdConnect:
 
-    def __exit__(self, exc_type, exc_value, traceback):
+    def __exit__(self):
         self.Detach()
         self.ClosePipe()
 
@@ -321,7 +321,10 @@ class FemDesignConnection(_FdConnect):
     def __exit__(self):
         super().__exit__()
         if(self.delete_dir):
-            shutil.rmtree(os.path.join(self._output_dir, "scripts"))
+            try:
+                shutil.rmtree(os.path.join(self.output_dir, "scripts"))
+            except:
+                pass
 
     @property
     def output_dir(self):
@@ -460,3 +463,6 @@ class FemDesignConnection(_FdConnect):
     def Disconnect(self):
         super().Detach()
         win32pipe.DisconnectNamedPipe(self.pipe_send)
+
+    def Close(self):
+        self.__exit__()
