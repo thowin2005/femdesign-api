@@ -21,6 +21,12 @@ def test_pipe():
         connection.Open("myModel.3dm")
     except Exception as e:
         assert isinstance(e, ValueError)
-        assert str(e) == "File myModel.3dm must have extension .struxml or .str"
+        assert str(e) == "file_name must have extension .struxml or .str"
 
     connection.__exit__()
+
+def test_interaction_surface():
+    connection = FemDesignConnection(minimized=True)
+    connection.Open(r"test/assets/concrete_beam.struxml")
+    guid = "c71d1619-420a-46fe-bbb7-423bf20fdcda"
+    connection.GenerateInteractionSurface(guid, "test/assets/interaction_surface.txt", 0.5, True)

@@ -48,3 +48,4 @@ FemDesign.Tests/Results/**/*.log
 /FemDesign.Examples/Python/jupyter-notebook/FEM-Design API
 /FemDesign.Examples/Python/jupyter-notebook/.ipynb_checkpoints
 /FemDesign.Python/packaging/src
+/FemDesign.Python/FEM-Design API

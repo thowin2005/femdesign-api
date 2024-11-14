@@ -11,6 +11,19 @@ def test_cmd_open():
     filename = xmlCmdOpen.find("filename")
     assert filename.text == os.path.join( os.getcwd(), file_path )
     
+def test_cmd_child():
+    file_path = "template.dsc"
+    xmlCmdChild = CmdChild("template.dsc").to_xml_element()
+
+    assert xmlCmdChild.tag == "cmdchild"
+    assert xmlCmdChild.text == os.path.join( os.getcwd(), file_path)
+
+    try:
+        xmlCmdChild = CmdChild("template.3dm").to_xml_element()
+    except Exception as e:
+        assert isinstance(e, ValueError)
+        assert str(e) == "file_name must have suffix .dsc"
+
 def test_cmd_save():
     file_path = "myFilePath.str"
     xmlCmdSave = CmdSave(file_path).to_xml_element()
@@ -128,3 +141,29 @@ def test_cmd_listgen():
     assert xmlCmdListGen.attrib.get("headers") == "1"
     assert xmlCmdListGen.find("GUID") is None
     assert len( xmlCmdListGen.findall("GUID") ) == 0
+
+def test_cmd_config():
+    file_path = "config.xml"
+    xmlCmdConfig = CmdConfig(file_path).to_xml_element()
+
+    assert xmlCmdConfig.tag == "cmdconfig"
+    assert xmlCmdConfig.attrib.get("file") == os.path.join( os.getcwd(), file_path )
+
+def test_cmd_interaction_surface():
+    guid = uuid.uuid4()
+    
+    xmlCmdInteractionSurface = CmdInteractionSurface(guid, "surface.txt", 0.0, False).to_xml_element()
+
+    assert xmlCmdInteractionSurface.tag == "cmdinteractionsurface"
+    assert xmlCmdInteractionSurface.attrib.get("guid") == str(guid)
+    assert xmlCmdInteractionSurface.attrib.get("outfile") == os.path.join( os.getcwd(), "surface.txt" )
+    assert xmlCmdInteractionSurface.attrib.get("offset") == "0.0"
+    assert xmlCmdInteractionSurface.attrib.get("fUlt") == "false"
+
+    xmlCmdInteractionSurface = CmdInteractionSurface(guid, "surface.txt", 5.2, True).to_xml_element()
+
+    assert xmlCmdInteractionSurface.tag == "cmdinteractionsurface"
+    assert xmlCmdInteractionSurface.attrib.get("guid") == str(guid)
+    assert xmlCmdInteractionSurface.attrib.get("outfile") == os.path.join( os.getcwd(), "surface.txt" )
+    assert xmlCmdInteractionSurface.attrib.get("offset") == "5.2"
+    assert xmlCmdInteractionSurface.attrib.get("fUlt") == "true"
