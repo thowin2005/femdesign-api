@@ -44,9 +44,8 @@ except Exception as err:
     raise err
 ```
 
-A wider list of examples can be found in [example](https://github.com/strusoft/femdesign-api/tree/master/FemDesign.Python/examples)
+A wider list of examples can be found in [example](https://github.com/strusoft/femdesign-api/tree/master/FemDesign.Examples/Python)
 
 ## Documentation
-
 
 https://femdesign-api-docs.onstrusoft.com/docs/intro
