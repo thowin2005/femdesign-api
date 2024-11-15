@@ -30,3 +30,8 @@ def test_interaction_surface():
     connection.Open(r"test/assets/concrete_beam.struxml")
     guid = "c71d1619-420a-46fe-bbb7-423bf20fdcda"
     connection.GenerateInteractionSurface(guid, "test/assets/interaction_surface.txt", 0.5, True)
+
+    assert os.path.exists("test/assets/interaction_surface.txt")
+    assert os.path.getsize("test/assets/interaction_surface.txt") > 0
+
+    os.remove("test/assets/interaction_surface.txt")

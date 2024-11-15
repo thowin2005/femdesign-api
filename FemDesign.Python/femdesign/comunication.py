@@ -506,8 +506,34 @@ class FemDesignConnection(_FdConnect):
         fdscript = Fdscript(log, [cmd_interaction_surface])
         self.RunScript(fdscript, "generate_interaction_surface")
     
+    def SetDesignParameters(self, file_path : str):
+        """Set design parameters
+
+        Args:
+            file_path (str): path to the file
+        """
+        log = OutputFileHelper.GetLogFilePath(self.output_dir)
+
+        cmd_design_parameters = CmdConfig(file_path)
+        fdscript = Fdscript(log, [cmd_design_parameters])
+        self.RunScript(fdscript, "set_design_parameters")
+
     ## it does not work
-    def Disconnect(self):
+    # def DumpDesignParameters(self, file_path : str):
+    #     """Dump calculation and design parameters
+
+    #     Args:
+    #         file_path (str): xml file path where the design and calculation parameters will be dumped
+    #     """
+    #     if not file_path.endswith(".xml"):
+    #         raise ValueError("file_name must have suffix .xml")
+
+    #     file_path = os.path.abspath(file_path)
+    #     message = f"; CXL MODULECOM WXMLCFG:{file_path}"
+    #     self.Send(message)
+
+    # ## it does not work
+    # def Disconnect(self):
         super().Detach()
         win32pipe.DisconnectNamedPipe(self.pipe_send)
 
