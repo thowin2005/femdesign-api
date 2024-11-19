@@ -18,16 +18,16 @@ using Eto.Drawing;
 
 namespace FemDesign.Grasshopper
 {
-    public class CompositeSectionDefine : GH_SwitcherComponent
+    public class CompositeSectionDefine_OBSOLETE2308 : GH_SwitcherComponent
     {
         private List<SubComponent> _subcomponents = new List<SubComponent>();
         public override string UnitMenuName => "Section";
-        protected override string DefaultEvaluationUnit => _subcomponents[2].name();
-        public override Guid ComponentGuid => new Guid("{093E4DB1-4CBC-4FAF-9356-481CBD1B0557}");
-        public override GH_Exposure Exposure => GH_Exposure.tertiary;
-        protected override System.Drawing.Bitmap Icon => Properties.Resources.DeltaBeamProfile;
+        protected override string DefaultEvaluationUnit => _subcomponents[0].name();
+        public override Guid ComponentGuid => new Guid("{A6B804EA-F254-4ABE-BEC5-FA69E92069AA}");
+        public override GH_Exposure Exposure => GH_Exposure.hidden;
+        protected override System.Drawing.Bitmap Icon => Properties.Resources.HSQProfile;
 
-        public CompositeSectionDefine()
+        public CompositeSectionDefine_OBSOLETE2308()
             : base("Composite.Define", "Define",
               "Define a new composite section.",
               CategoryName.Name(), SubCategoryName.Cat4b())
@@ -46,14 +46,14 @@ namespace FemDesign.Grasshopper
 
         protected override void RegisterEvaluationUnits(EvaluationUnitManager mngr)
         {
-            _subcomponents.Add(new EffectiveCompositeSlab());
+            //_subcomponents.Add(new EffectiveCompositeSlab());
             _subcomponents.Add(new HSQProfile());
-            _subcomponents.Add(new DeltaBeamProfile());
-            _subcomponents.Add(new FilledIProfile());
+            //_subcomponents.Add(new DeltaBeamProfile());
+            //_subcomponents.Add(new FilledIProfile());
             _subcomponents.Add(new FilledCruciformProfile());
-            _subcomponents.Add(new RHSProfile());
+            //_subcomponents.Add(new RHSProfile());
             _subcomponents.Add(new FilledSteelTube());
-            _subcomponents.Add(new SteelTubeWithIProfile());
+            //_subcomponents.Add(new SteelTubeWithIProfile());
             _subcomponents.Add(new SteelTubeWithSteelCore());
 
             foreach (SubComponent item in _subcomponents)
@@ -77,7 +77,7 @@ namespace FemDesign.Grasshopper
             {
                 return;
             }
-            
+
             foreach (SubComponent item in _subcomponents)
             {
                 if (unit.Name.Equals(item.name()))
