@@ -98,6 +98,7 @@ namespace FemDesign.Geometry
         {
             this.Contours = new List<Contour> { outerContour };
             this.Contours.AddRange(holesContours);
+            this.Plane = outerContour.Edges[0].Plane;
         }
 
         public bool IsPlanar
