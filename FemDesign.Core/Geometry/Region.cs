@@ -79,12 +79,25 @@ namespace FemDesign.Geometry
         public Region(List<Contour> contours)
         {
             this.Contours = contours;
+            this.Plane = contours[0].Edges[0].Plane;
         }
 
         public Region(List<Contour> contours, Plane plane)
         {
             this.Contours = contours;
             this.Plane = plane;
+        }
+
+        /// <summary>
+        /// Construct a region with holes from an outer contour and inner contours.
+        /// The direction of the holes contours are assumed to be opposite to the outer.
+        /// </summary>
+        /// <param name="outerContour"></param>
+        /// <param name="holesContours"></param>
+        public Region(Contour outerContour, List<Contour> holesContours)
+        {
+            this.Contours = new List<Contour> { outerContour };
+            this.Contours.AddRange(holesContours);
         }
 
         public bool IsPlanar
