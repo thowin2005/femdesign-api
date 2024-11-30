@@ -26,7 +26,7 @@ namespace FemDesign.Grasshopper
     {
         public ApplicationRun() : base("Application.Run", "RunApplication", "Run application for a model.", CategoryName.Name(), SubCategoryName.Cat7a())
         {
-            _minimised = false;
+            _minimised = true;
             _keepOpen = false;
         }
 
@@ -219,122 +219,127 @@ namespace FemDesign.Grasshopper
             // Create Task
             var t = Task.Run((Action)(() =>
             {
-                var connection = new FemDesign.FemDesignConnection(minimized: _minimised, keepOpen: _keepOpen);
+            var connection = new FemDesign.FemDesignConnection(minimized: _minimised, keepOpen: _keepOpen);
 
-                connection.Open(_model.Value);
+            connection.Open(_model.Value);
 
-                if (cfg.Count != 0)
+            if (cfg.Count != 0)
+            {
+                foreach (var _cfg in cfg)
                 {
-                    foreach (var _cfg in cfg)
+                    // Check if the value is a string
+                    if (_cfg.Value is string filePath)
                     {
-                        // Check if the value is a string
-                        if (_cfg.Value is string filePath)
-                        {
-                            connection.SetConfig(filePath);
-                        }
-                        // Check if the value is of type FemDesign.Calculate.CONFIG
-                        else if (_cfg.Value is FemDesign.Calculate.CONFIG config)
-                        {
-                            connection.SetConfig(config);
-                        }
+                        connection.SetConfig(filePath);
+                    }
+                    // Check if the value is of type FemDesign.Calculate.CONFIG
+                    else if (_cfg.Value is FemDesign.Calculate.CONFIG config)
+                    {
+                        connection.SetConfig(config);
                     }
                 }
-                else
-                {
-                    string assemblyLocation = Assembly.GetExecutingAssembly().Location;
-                    var _cfgfilePath = System.IO.Path.Combine(System.IO.Path.GetDirectoryName(assemblyLocation), @"cfg.xml");
-                    connection.SetConfig(_cfgfilePath);
-                }
+            }
+            else
+            {
+                string assemblyLocation = Assembly.GetExecutingAssembly().Location;
+                var _cfgfilePath = System.IO.Path.Combine(System.IO.Path.GetDirectoryName(assemblyLocation), @"cfg.xml");
+                connection.SetConfig(_cfgfilePath);
+            }
 
-                if (globalCfg.Count != 0)
+            if (globalCfg.Count != 0)
+            {
+                foreach (var config in globalCfg)
                 {
-                    foreach (var config in globalCfg)
+                    // Check if the value is a string
+                    if (config.Value is string filePath)
                     {
-                        // Check if the value is a string
-                        if (config.Value is string filePath)
-                        {
-                            connection.SetGlobalConfig(filePath);
-                        }
-                        // Check if the value is of type FemDesign.Calculate.CONFIG
-                        else if (config.Value is FemDesign.Calculate.GlobConfig globConfig)
-                        {
-                            connection.SetGlobalConfig(globConfig);
-                        }
+                        connection.SetGlobalConfig(filePath);
+                    }
+                    // Check if the value is of type FemDesign.Calculate.CONFIG
+                    else if (config.Value is FemDesign.Calculate.GlobConfig globConfig)
+                    {
+                        connection.SetGlobalConfig(globConfig);
                     }
                 }
-                else
-                {
-                    string assemblyLocation = Assembly.GetExecutingAssembly().Location;
-                    var _globCfgfilePath = System.IO.Path.Combine(System.IO.Path.GetDirectoryName(assemblyLocation), @"cmdglobalcfg.xml");
-                    connection.SetConfig(_globCfgfilePath);
-                }
+            }
+            else
+            {
+                string assemblyLocation = Assembly.GetExecutingAssembly().Location;
+                var _globCfgfilePath = System.IO.Path.Combine(System.IO.Path.GetDirectoryName(assemblyLocation), @"cmdglobalcfg.xml");
+                connection.SetConfig(_globCfgfilePath);
+            }
 
-                if (analysis != null)
+            if (analysis != null)
+                connection.RunAnalysis(analysis);
+
+
+            // run design
+
+            if (design != null)
+            {
+                CmdUserModule userModule = design.Mode;
+                if (designGroups.Count() == 0)
+                    connection.RunDesign(userModule, design);
+                else
+                    connection.RunDesign(userModule, design, designGroups);
+
+                if (design.ApplyChanges == true && design.Check == true)
+                {
                     connection.RunAnalysis(analysis);
+                    var _design = new Design(check: true);
+
+                    connection.RunDesign(userModule, _design);
+                }
+            }
 
 
-                // run design
+            finiteElement = connection.GetFeaModel(units.Length);
 
-                if (design != null)
+            int i = 0;
+            if (types.Count != 0)
+            {
+                foreach (var type in types)
                 {
-                    CmdUserModule userModule = design.Mode;
-                    if (designGroups.Count() == 0)
-                        connection.RunDesign(userModule, design);
-                    else
-                        connection.RunDesign(userModule, design, designGroups);
+                    var res = _getResults(connection, type, units, options);
+                    resultsTree.AddRange(res, new GH_Path(iteration, i));
+                    i++;
+                }
+            }
 
-                    if (design.ApplyChanges == true && design.Check == true)
-                    {
-                        connection.RunAnalysis(analysis);
-                        var _design = new Design(check: true);
-
-                        connection.RunDesign(userModule, _design);
-                    }
+            if (bscFilePath.Count != 0)
+            {
+                foreach (var bsc in bscFilePath)
+                {
+                    var res = connection.GetResultsFromBsc(bsc);
+                    resultsTree.AddRange(res, new GH_Path(iteration, i));
+                    i++;
                 }
 
+            }
 
-                finiteElement = connection.GetFeaModel(units.Length);
-
-                int i = 0;
-                if (types.Count != 0)
+            if (dscTemplate != null)
+            {
+                var outputDocx = OutputFileHelper.GetDocxPath(connection.OutputDir);
+                if (saveFilePath != null)
                 {
-                    foreach (var type in types)
-                    {
-                        var res = _getResults(connection, type, units, options);
-                        resultsTree.AddRange(res, new GH_Path(iteration, i));
-                        i++;
-                    }
+                    outputDocx = saveFilePath + "\\Dokumentation.docx";
                 }
 
-                if (bscFilePath.Count != 0)
-                {
-                    foreach (var bsc in bscFilePath)
-                    {
-                        var res = connection.GetResultsFromBsc(bsc);
-                        resultsTree.AddRange(res, new GH_Path(iteration, i));
-                        i++;
-                    }
+                connection.SaveDocx(outputDocx, dscTemplate);
+            }
 
-                }
-
-                if (dscTemplate != null)
-                {
-                    var outputDocx = OutputFileHelper.GetDocxPath(connection.OutputDir);
-                    connection.SaveDocx(outputDocx, dscTemplate);
-                }
-
-                // return the new model
-                model = connection.GetModel();
+            // return the new model
+            model = connection.GetModel();
 
 
-                // save calculated model in .str format
-                if (saveFilePath == null)
-                {
-                    saveFilePath = OutputFileHelper.GetStrPath(connection.OutputDir, "model_saved");
-                }
+            // save calculated model in .str format
+            if (saveFilePath == null)
+            {
+                saveFilePath = OutputFileHelper.GetStrPath(connection.OutputDir);
+            }
+                string saveFilePathStru = saveFilePath + "\\Model";
 
-                connection.Save(saveFilePath);
-
+                connection.Save(saveFilePathStru);
                 connection.Dispose();
             }));
 

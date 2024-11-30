@@ -79,8 +79,8 @@ namespace FemDesign.Shells
         {
             this.EntityCreated();
             this.MovingLocal = false;
-            this.JoinedStartPoint = true;
-            this.JoinedEndPoint = true;
+            this.JoinedStartPoint = false;
+            this.JoinedEndPoint = false;
 
             if (libraryName is null)
                 this.Rigidity = rigidity;
